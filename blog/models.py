@@ -4,6 +4,7 @@ import os
 
 class Post(models.Model):
     title = models.CharField(max_length=30)  # 문자를 담는 필드, 최대 길이 30
+    hook_text = models.CharField(max_length=100, blank=True)
     content = models.TextField()  # 문자열의 길이 제한이 없는 텍스트 필드
 
     head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank=True)
