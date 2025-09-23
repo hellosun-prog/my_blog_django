@@ -10,8 +10,12 @@ class TestView(TestCase):
         self.client = Client()
         self.user_rumi = User.objects.create_user(username='rumi', password='somepassword')
         self.user_jinu = User.objects.create_user(username='jinu', password='somepassword')
+        self.user_jinu.is_staff = True
+        self.user_jinu.save()
+
         self.category_programming = Category.objects.create(name='programming', slug='programming')
         self.category_music = Category.objects.create(name='music', slug='music')
+
         self.tag_python_kor = Tag.objects.create(name='파이썬 공부', slug='파이썬-공부')
         self.tag_python = Tag.objects.create(name='python', slug='python')
         self.tag_hello = Tag.objects.create(name='hello', slug='hello')
@@ -172,7 +176,10 @@ class TestView(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
         self.client.login(username='rumi', password='somepassword')
+        response = self.client.get('/blog/create_post/')
+        self.assertNotEqual(response.status_code, 200)
 
+        self.client.login(username='jinu', password='somepassword')
         response = self.client.get('/blog/create_post/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -191,4 +198,4 @@ class TestView(TestCase):
         self.assertEqual(Post.objects.count(), 4)
         last_post = Post.objects.last()
         self.assertEqual(last_post.title, "Post Form 만들기")
-        self.assertEqual(last_post.author.username, 'rumi')
+        self.assertEqual(last_post.author.username, 'jinu')
