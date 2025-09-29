@@ -21,7 +21,15 @@
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false"> {{ user.username }}
+                       aria-expanded="false">
+                        {% if user.socialaccount_set.all.first.get_avatar_url %}
+                        <img class="rounded-circle" width="25px"
+                             src="{{ user.socialaccount_set.all.first.get_avatar_url }}" alt="">
+                        {% else %}
+                        <img class="rounded-circle" src="https://i.pravatar.cc/150?u={{ user.email }}" alt=""
+                             width="25px">
+                        {% endif %}
+                        {{ user.username }}
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/accounts/logout/">Log Out</a></li>
